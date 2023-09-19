@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:perfqse/Views/pilotage/controllers/controllerEntity.dart';
 import 'package:switcher/core/switcher_size.dart';
 import 'package:switcher/switcher.dart';
 import '../../../../constants/colors.dart';
 import '../../controllers/side_menu_controller.dart';
+import 'get_info_espace.dart';
 
 class MenuNavPilotage extends StatefulWidget {
   final String responsive;
@@ -196,8 +197,9 @@ class CustomMenuButton extends StatefulWidget {
 }
 
 class _CustomMenuButtonState extends State<CustomMenuButton> {
-  final ControllerEntity _controllerEntity = Get.find();
-  
+  final storage=  FlutterSecureStorage() ;
+  String espace = InfoEspace().getNameEspace();
+
   bool _isHovering = false;
   bool isSelected = false;
   String _rootLocation = "/pilotage/espace/";
@@ -205,7 +207,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
   final SideMenuController sideMenuController = Get.find();
 
   bool calculateSelectedIndex(BuildContext context) {
-     _rootLocation = "/pilotage/espace/${_controllerEntity.headerNom.value}";
+     _rootLocation = "/pilotage/espace/${espace}";
     final String location = GoRouterState.of(context).location;
     if (location.endsWith(widget.pathMenu)) {
       return true;
@@ -215,7 +217,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
 
   @override
   Widget build(BuildContext context) {
-    _rootLocation = "/pilotage/espace/${_controllerEntity.headerNom.value}";
+    _rootLocation = "/pilotage/espace/${espace}}";
     isSelected = calculateSelectedIndex(context);
     return widget.isExtended ? InkWell(
       overlayColor: MaterialStateProperty.all(Colors.transparent),

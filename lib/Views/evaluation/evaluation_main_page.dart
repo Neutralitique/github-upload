@@ -25,9 +25,9 @@ class _EvaluationPageState extends State<EvaluationPage> {
     var data = {};
     String? email = await storage.read(key: 'email');
     final user = await supabase.from('Users').select().eq('email', email);
-    final accesEvaluation = await supabase.from('AccesEvaluation').select().eq('email', email);
+    final accesEvaluation = await supabase.from('AccesAudit').select().eq('email', email);
     data["user"] = user[0] ;
-    data["AccesEvaluation"] = accesEvaluation[0] ;
+    data["AccesAudit"] = accesEvaluation[0] ;
     if(checkAccesPilotage(accesEvaluation[0]) ==false) {
       await Future.delayed(Duration(milliseconds: 500));
       context.go("/");

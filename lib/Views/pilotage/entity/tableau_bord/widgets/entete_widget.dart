@@ -13,7 +13,6 @@ import 'package:selector_wheel/selector_wheel/selector_wheel.dart';
 import 'package:stylish_dialog/stylish_dialog.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:perfqse/Views/pilotage/controllers/controllerEntity.dart';
 import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/utils_TB.dart';
 import '../../../../../api/api_indicateur.dart';
 import '../../../../../constants/colors.dart';
@@ -24,6 +23,7 @@ import '../../../../../models/pilotage/enjeuModel.dart';
 import '../../../../../widgets/customtext.dart';
 import '../../../../../widgets/unimpleted_widget.dart';
 import '../../../controllers/tableau_controller.dart';
+import '../../widgets/get_info_espace.dart';
 import 'data_table/row_axe.dart';
 import 'data_table/row_critNormatif.dart';
 
@@ -35,12 +35,11 @@ class EnteteTableauBord extends StatefulWidget {
 }
 
 class _EntityWidgetWidgetState extends State<EnteteTableauBord> {
-
+  String espace = InfoEspace().getNameEspace();
   int year = DateTime.now().year;
   String? selectedValueYear;
   String? selectedValueMonth;
   final ControllerTbQSE _controllerTbQSE=Get.find();
-  final ControllerEntity _controllerEntity=Get.find();
   final ApiTableau_Bord api_TB = ApiTableau_Bord();
   late TextEditingController mois_controller = TextEditingController();
   List<ProcessM>ProcessEntity=
@@ -77,7 +76,7 @@ void getAxe(){
       await api_TB.getCritere();
       await api_TB.getIndicateur(reference: "Q",
           annee: _controllerTbQSE.dropdownAnnee.value,
-          entity: _controllerEntity.selectedEntity.value);
+          entity:espace);
       dialog1.show();
       await Future.delayed(Duration(seconds: 2));
       dialog1.dismiss();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:perfqse/Views/pilotage/controllers/controllerEntity.dart';
 import 'package:perfqse/Views/pilotage/controllers/tableau_controller.dart';
 import 'package:perfqse/routes/routes.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,15 +12,13 @@ import 'Views/common/forgot_password/controller/reset_password_controller.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Get.put(ResetPassWordController());
-  await Get.put(ControllerEntity());
   await Get.put(ControllerTbQSE());
   WidgetsFlutterBinding.ensureInitialized();
   final storage = FlutterSecureStorage();
-  await storage.write(key: "app_version", value: "version 0.1.1");
   await Future.delayed(Duration(seconds: 3));
   await Supabase.initialize(
-    url: "https://djlcnowdwysqbrggekme.supabase.co",
-    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqbGNub3dkd3lzcWJyZ2dla21lIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTIxNzc1NjcsImV4cCI6MjAwNzc1MzU2N30.UxvLKjDhQ4ghsGTTY7Sy1Q75YCktx2nXR2pHuLeIMF4",
+    url: "https://tqtweixnabhkxeyfarop.supabase.co",
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxdHdlaXhuYWJoa3hleWZhcm9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTQ4NzczODEsImV4cCI6MjAxMDQ1MzM4MX0.h-uqQjKCk8Fg254YyUKaG1yFhcX-ElJK8gfWp5sniuo",
   );
   runApp(const MyApp());
 }
@@ -51,6 +49,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routerConfig: RouteClass.router,
+      builder: EasyLoading.init(),
     );
   }
 

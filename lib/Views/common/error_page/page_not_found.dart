@@ -93,7 +93,7 @@ class _PageNotFoundState extends State<PageNotFound> {
                           },
                           hoverColor: Colors.amber,
                           child: const CustomText(
-                            text: "Retournez à l'accueil principal de Perf RSE",
+                            text: "Retournez à l'accueil principal de Perf QSE",
                             size: 24,
                             weight: FontWeight.bold,
                           )),

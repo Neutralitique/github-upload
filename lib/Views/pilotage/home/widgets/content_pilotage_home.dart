@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:perfqse/Views/pilotage/home/widgets/expand_element.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../module/styled_scrollview.dart';
 import '../../../../widgets/customtext.dart';
-import '../../controllers/controllerEntity.dart';
 import 'contentbox.dart';
 import 'listefilliale.dart';
 import 'overview_card.dart';
@@ -20,7 +22,6 @@ class ContentPilotageHome extends StatefulWidget {
 }
 
 class _ContentPilotageHomeState extends State<ContentPilotageHome> {
-  final ControllerEntity _controllerEntity =Get.find();
   ScrollController scrollController = ScrollController();
 
      final List<Map<String,dynamic>> _filliale = List.generate(
@@ -90,10 +91,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                   height: 211,
                   children: _processGene.map((item){
                     return TextButton(onPressed:(){
-                      if(item["villefirst"]=="Trechville"){
-                        _controllerEntity.selectedEntity.value=item["villefirst"];
-                        context.go("/pilotage/espace/Trechville/accueil");
-                      }
+
                     }, child:Text(item["processGene"]!,
                       style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,
                           fontSize: 16),));
@@ -126,14 +124,11 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                       child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: _filliale.map((item){
-                        return TextButton(onPressed:(){
-                          if(item["commune"]=="Trechville"){
-
-                            context.go("/pilotage/espace/Trechville/accueil");
-                          }
-                        }, child:Text(item["commune"]!,
-                          style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,
-                              fontSize: 16),));
+                        return EspaceTextButton(
+                          title: item["commune"],
+                          espaceID:item["commune"],
+                          color: Colors.black,
+                        );
                       }).toList(),
                   ),
                     ),
@@ -205,6 +200,94 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
         ],
       ),
     );
+  }
+}
+class EspaceTextButton extends StatefulWidget {
+  final String title;
+  final String espaceID;
+  final Color color;
+  final Function()? onTap;
+  const EspaceTextButton({super.key, required this.title, required this.espaceID, this.onTap, required this.color});
+
+  @override
+  State<EspaceTextButton> createState() => _EspaceTextButtonState();
+}
+
+class _EspaceTextButtonState extends State<EspaceTextButton> {
+
+  final supabase = Supabase.instance.client;
+  final storage = FlutterSecureStorage();
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Accès refusé'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("Vous n'avez pas accès à cet espace."),
+                SizedBox(height: 20,),
+                Image.asset("assets/images/forbidden.png",width: 50,height: 50,)
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<bool> goToEspaceEntitePilotage(String idEntite) async{
+    print(idEntite);
+    EasyLoading.show(status: 'Chargement...');
+    await Future.delayed(Duration(seconds: 2));
+    String? email = await storage.read(key: 'email');
+    if (email == null) {
+      EasyLoading.dismiss();
+      await Future.delayed(Duration(milliseconds: 30));
+      _showMyDialog();
+      return false;
+    }
+    final result = await supabase.from("AccesPilotage").select().eq("email", email);
+    final acces = result[0];
+    if (acces["est_bloque"]) {
+      EasyLoading.dismiss();
+      await Future.delayed(Duration(milliseconds: 30));
+      _showMyDialog();
+      return false;
+    }
+    final bool verfication = (acces["est_spectateur"] || acces["est_collecteur"] || acces["est_validateur"] || acces["est_admin"]);
+    final bool checkEntite = (acces["espace"].contains(widget.espaceID));
+    if (verfication && checkEntite) {
+      EasyLoading.dismiss();
+      await storage.write(key: 'espace',value:widget.espaceID);
+      String espaceWithoutSpecialCaratere=widget.espaceID.replaceAll("é","e").replaceAll("è","e");
+      final path = "/pilotage/espace/${espaceWithoutSpecialCaratere}/accueil";
+      await Future.delayed(Duration(milliseconds: 100));
+      context.go(path);
+      return true;
+    }
+    EasyLoading.dismiss();
+    await Future.delayed(Duration(milliseconds: 30));
+    _showMyDialog();
+    return false;
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: widget.onTap ?? () async{
+          goToEspaceEntitePilotage(widget.espaceID);
+        },
+        child: CustomText(
+          text: "${widget.title}",
+          color: widget.color,
+          weight: FontWeight.bold,
+          size:16,
+        ));
   }
 }
 

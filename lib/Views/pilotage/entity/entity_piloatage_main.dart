@@ -60,7 +60,7 @@ class _EntityPilotageMainState extends State<EntityPilotageMain> {
           return Scaffold(body: Center(child: loadingPageWidget()));
         }
         final data = snapshot.data!;
-        final shortName = "${data["user"]["prenom"][0]}${data["user"]["nom"][0]}";
+        String shortName = "${data["user"]["prenom"][0]}${data["user"]["nom"][0]}";
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(60.0),
@@ -71,7 +71,7 @@ class _EntityPilotageMainState extends State<EntityPilotageMain> {
             drawer: const DrawerMenuPilotage(),
             endDrawer: const DrawerMenuPilotage(),
             body: Row(
-              children: [MenuNavPilotage(responsive: responsive), Expanded(child: widget.child)],
+              children: [MenuNavPilotage(responsive: responsive),Expanded(child: widget.child)],
             ),
           ),
         );

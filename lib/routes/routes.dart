@@ -19,6 +19,7 @@ import '../Views/pilotage/entity/suivi/screen_suivi_pilotage.dart';
 import '../Views/pilotage/entity/support_client/screen_support_client.dart';
 import '../Views/pilotage/entity/tableau_bord/indicateur_screen.dart';
 import '../Views/pilotage/entity/tableau_bord/screen_tableau_bord_pilotage.dart';
+import '../Views/pilotage/entity/widgets/get_info_espace.dart';
 import '../Views/pilotage/home/pilotage_home.dart';
 import '../helpers/helper_methods.dart';
 import '../widgets/loading_page.dart';
@@ -28,6 +29,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(d
 
 class RouteClass {
   static final supabase = Supabase.instance.client;
+  static final _espace=InfoEspace().getNameEspace();
 
   static final router = GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -61,8 +63,8 @@ class RouteClass {
           ),
           routes: [
             GoRoute(
-                path: 'espace/sucrivoire-siege',
-                name: "Sucrivoire Siège",
+                path: 'espace/Bouafle',
+                name: "Bouaflé",
                 pageBuilder: (context, state) => NoTransitionPage<void>(
                     key: state.pageKey,
                     restorationId: state.pageKey.value,
@@ -185,8 +187,7 @@ class RouteClass {
       final storage = FlutterSecureStorage();
       String? loggedPref = await storage.read(key: 'logged');
       String? email = await storage.read(key: 'email');
-      final appVersion = await getAppVersion();
-      String? appVersionFlutter = await storage.read(key: 'app_version');
+
       bool sessionVerification = false;
       final session = supabase.auth.currentSession;
       if (session != null) {
@@ -194,7 +195,7 @@ class RouteClass {
       } else {
         sessionVerification = false;
       }
-      if (loggedPref == "true" && email!=null && GetUtils.isEmail(email) && sessionVerification ==true && appVersion == appVersion)//appVersionFlutter )
+      if (loggedPref == "true" && email!=null && GetUtils.isEmail(email) && sessionVerification == true)//appVersionFlutter )
       {
         return null;
       }

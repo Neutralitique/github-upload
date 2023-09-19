@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
-import 'package:perfqse/Views/pilotage/controllers/controllerEntity.dart';
+
+import 'get_info_espace.dart';
 
 class EntityWidget extends StatefulWidget {
   const EntityWidget({super.key});
@@ -12,8 +13,7 @@ class EntityWidget extends StatefulWidget {
 }
 
 class _EntityWidgetState extends State<EntityWidget> {
-
-  final ControllerEntity _controllerEntity =Get.find();
+  String espace = InfoEspace().getNameEspace();
 
   bool _isHovering = false;
   @override
@@ -31,7 +31,7 @@ class _EntityWidgetState extends State<EntityWidget> {
         child: Row(
           children: [
             Text(
-              _controllerEntity.headerNom.value,
+              espace,
               style: TextStyle(
                   fontSize: 20,
                   color: _isHovering ? Colors.red : Colors.black),

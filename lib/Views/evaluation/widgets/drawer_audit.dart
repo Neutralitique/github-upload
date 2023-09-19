@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class DrawerEvaluation extends StatefulWidget {
   const DrawerEvaluation({super.key});
@@ -86,7 +87,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
               ),
               SizedBox(height: 10),
               CustomMenuButton(
-                pathMenu: '/gestion-audits',
+                pathMenu: '',
                 image: "assets/icons/table.png",
                 icon: Icons.table_chart_rounded,
                 isFullPath: false,
@@ -94,7 +95,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
               ),
               SizedBox(height: 10),
               CustomMenuButton(
-                pathMenu: '/admin',
+                pathMenu: '',
                 image: "assets/icons/admin.png",
                 icon: Icons.admin_panel_settings_outlined,
                 isFullPath: false,
@@ -104,7 +105,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                 height: 10,
               ),
               CustomMenuButton(
-                pathMenu: '/d',
+                pathMenu: '',
                 image: "",
                 icon: Icons.track_changes_outlined,
                 label: "Historiques",
@@ -122,7 +123,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
               ),
               SizedBox(height: 10),
               CustomMenuButton(
-                pathMenu: '/d',
+                pathMenu: '',
                 image: "",
                 icon: Icons.language,
                 isFullPath: false,
@@ -210,7 +211,9 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
                 topRight: Radius.circular(20),
                 bottomRight: Radius.circular(20))),
         child: OutlinedButton(
-          onPressed: () {},
+          onPressed: () {
+            context.go(widget.pathMenu);
+          },
           style: OutlinedButton.styleFrom(
             backgroundColor: Colors.transparent,
             foregroundColor: Colors.transparent,

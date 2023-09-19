@@ -117,7 +117,44 @@ class _CopyRightState extends State<CopyRight> {
       ),
     );
   }
+   _showDialog(){
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+              shape:RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child:Container(
+                height: 350,
+                width: 300,
+                child:Column(
+                  children: [
+                    Center(
+                      child: Icon(Icons.wifi_off_sharp,size: 60,),
+                    ),
+                    SizedBox(height: 10,),
+                    Text("Vérifié votre connection et réssayer",style: TextStyle(fontSize:20,color:Colors.black),),
+                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 150,
+                      width: 200,
+                      child: OutlinedButton(onPressed:(){
+                      }, style:OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40)
+                        )
+                      ),
+                          child:Text("Réssayer",style: TextStyle(fontSize:17,color:Colors.black),)),
+                    )
+                  ],
+                )
+              )
+          );
+        }
 
+    );
+  }
   void  getInternetStatus() async {
     while (true) {
       try {
@@ -132,6 +169,7 @@ class _CopyRightState extends State<CopyRight> {
       } catch (e){
         setState(() {
           print(e.toString());
+          _showDialog();
           isConnected = false;
         });
       }

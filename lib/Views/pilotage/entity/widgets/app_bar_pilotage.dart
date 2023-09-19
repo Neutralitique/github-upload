@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:perfqse/Views/pilotage/controllers/controllerEntity.dart';
+import 'package:perfqse/Views/pilotage/entity/widgets/get_info_espace.dart';
 import '../../../../utils/utils.dart';
 import '../../../../widgets/customtext.dart';
 import '../../controllers/side_menu_controller.dart';
@@ -18,7 +19,7 @@ class AppBarPilotage extends StatefulWidget {
 class _AppBarPilotageState extends State<AppBarPilotage> {
 
   final SideMenuController sideMenuController = Get.find();
-  final ControllerEntity _controllerEntity =Get.find();
+  String espace = InfoEspace().getNameEspace();
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +60,11 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
           SizedBox(
             width: responsive == "cas-0" ? 10 : 20,
           ),
-          responsive == "cas-0" ? Container() :Text("${_controllerEntity.headerLogo.value}",style: TextStyle(fontSize: 18,color:Colors.red,fontWeight: FontWeight.bold),),
+          responsive == "cas-0" ? Container() :Text("",style: TextStyle(fontSize: 18,color:Colors.red,fontWeight: FontWeight.bold),),
           SizedBox(
             width: responsive == "cas-0" ? 10 : 20,
           ),
-          responsive == "cas-0" ? Text("${_controllerEntity.headerNom.value}",style: TextStyle(fontSize: 18),) : const EntityWidget(),
+          responsive == "cas-0" ? Text("${espace}",style: TextStyle(fontSize: 18),) : const EntityWidget(),
           Expanded(child: Container()),
           const Icon(
             Icons.notifications_none_outlined,
@@ -75,7 +76,7 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
           ),
           InkWell(
             onTap: (){
-              context.go("/pilotage/espace/${_controllerEntity.headerNom}/profil");
+              context.go("/pilotage/espace/${espace}/profil");
             },
             radius: 20,
               child: CircleAvatar( backgroundColor: Colors.red,

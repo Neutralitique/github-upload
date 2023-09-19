@@ -88,8 +88,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<bool> checkAccesEvaluation(String email) async {
-    final result =
-        await supabase.from("AccesEvaluation").select().eq("email", email);
+    final result = await supabase.from("AccesAudit").select().eq("email", email);
     final acces = result[0];
     if (acces["est_bloque"]) {
       _showMyDialog();

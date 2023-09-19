@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:perfqse/Views/pilotage/controllers/controllerEntity.dart';
 import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/dashboard_list_view.dart';
 import '../../../../api/api_indicateur.dart';
 import '../../../../helpers/helper_methods.dart';
 import '../../controllers/tableau_controller.dart';
+import '../widgets/get_info_espace.dart';
 import '../widgets/privacy_widget.dart';
 import 'widgets/collecte_status.dart';
 import 'widgets/dasboard_filtre.dart';
@@ -20,8 +20,8 @@ class IndicateurScreen extends StatefulWidget {
 }
 
 class _IndicateurScreenState extends State<IndicateurScreen> {
+  String espace = InfoEspace().getNameEspace();
   final ControllerTbQSE _controllerTbQSE =  Get.find();
-  final ControllerEntity _controllerEntity =Get.find();
   final ApiTableau_Bord api_TB = ApiTableau_Bord();
   late ScrollController _scrollController;
   bool _isLoaded = false;
@@ -29,7 +29,7 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
      await api_TB.getAxe();
      await api_TB.getEnjeu();
     await api_TB.getCritere();
-    await api_TB.getIndicateur(reference: "Q", annee:_controllerTbQSE.dropdownAnnee.value, entity: _controllerEntity.selectedEntity.value);
+    await api_TB.getIndicateur(reference: "Q", annee:_controllerTbQSE.dropdownAnnee.value, entity: espace);
   }
 
   void loadScreen() async {
